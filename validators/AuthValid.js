@@ -22,8 +22,8 @@ exports.SignupValidator=[
 
 
 exports.LoginValidator=[
-   body("email").isLength({min:3,max:25}).trim().isEmail().withMessage("inavlid name"),
-    body("password").trim().withMessage("inavlid name"),
+   body("email").trim().isEmail().withMessage("invalid name"),
+   body("password").isLength({min:3,max:15}).trim().isAlphanumeric().withMessage("inavlid name"),
      (req,res,next)=>{
         const result=validationResult(req)
         if(!result.isEmpty()){
