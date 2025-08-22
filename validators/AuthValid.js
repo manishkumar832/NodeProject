@@ -2,7 +2,7 @@ const {body,validationResult, header}=require("express-validator")
 
 exports.SignupValidator=[
     body("name").isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
-    body("email").trim().isEmail().withMessage("inavlid name"),
+    body("email").trim().isEmail().isAlphanumeric().withMessage("inavlid name"),
     body("password").isLength({min:3,max:15}).trim().isAlphanumeric().withMessage("inavlid name"),
     body("username").isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
     (req,res,next)=>{
@@ -22,7 +22,7 @@ exports.SignupValidator=[
 
 
 exports.LoginValidator=[
-   body("email").trim().isEmail().withMessage("invalid name"),
+   body("email").trim().isEmail().isAlphanumeric().withMessage("invalid name"),
    body("password").isLength({min:3,max:15}).trim().isAlphanumeric().withMessage("inavlid name"),
      (req,res,next)=>{
         const result=validationResult(req)
@@ -45,7 +45,7 @@ exports.tokenValidator=[
 
 exports.editvalidator=[
    body("name").optional().isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
-    body("email").optional().trim().isEmail().withMessage("inavlid name"),
+    body("email").optional().trim().isEmail().isAlphanumeric().withMessage("inavlid name"),
     body("password").optional().isLength({min:3,max:15}).trim().isAlphanumeric().withMessage("inavlid name"),
     body("username").optional().isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
 ]
