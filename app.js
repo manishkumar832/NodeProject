@@ -7,9 +7,14 @@ const UserRoutes=require("./routes/userRoute.js")
 const EmployeeRoute=require("./routes/employeeRoute.js")
 const JobseekerRoute=require("./routes/JobseekerRoute.js")
 const {ErrorMiddle}=require("./middlewares/errorMiddleware.js")
+const cors=require("cors")
 
 ConnectDB()
 
+
+app.use(cors({
+    origin:["http://localhost:5173"]
+}))
 app.use(express.json())
 app.use(express.urlencoded())
 
