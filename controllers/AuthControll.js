@@ -4,13 +4,14 @@ const {TokenCreation}=require("../utils/AuthToken.js")
 
 const signupController=async(req,res,next)=>{
     try {
-        const {name,email,password,username}=req.body;
+        const {name,email,password,username,role}=req.body;
     const hashpass=await bcrypt.hash(password,12)
     const user=new Model({
         name:name,
         email:email,
         username:username,
-        password:hashpass
+        password:hashpass,
+        role:"jobseeker" || role
     })
     const SaveData=await user.save()
     res.send(SaveData)
