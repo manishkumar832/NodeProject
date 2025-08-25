@@ -28,6 +28,10 @@ const LoginController=async(req,res,next)=>{
     const finduser=await Model.findOne({email:email})
     const decodeUser=await bcrypt.compare(password,finduser.password)
     if(decodeUser){
+        if (role && finduser.role !== role) {
+        finduser.role = role;
+        await finduser.save();
+      }
         const tokens=await TokenCreation(finduser)
         const user=await Model.findById(finduser._id).select(["-password","-__v","-createdAt","-updatedAt"])
         res.json({message:"user details",user,token:tokens})
