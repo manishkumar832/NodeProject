@@ -11,7 +11,7 @@ const signupController=async(req,res,next)=>{
         email:email,
         username:username,
         password:hashpass,
-        role:"jobseeker" || role
+        role:role || "jobseeker"
     })
     const SaveData=await user.save()
     res.send(SaveData)
