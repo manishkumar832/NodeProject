@@ -5,7 +5,7 @@ const {Model}=require("../models/authmodel.js")
 const jobs=async(req,res,next)=>{
    try {
     const {Title,description,company,location,salary,role}=req.body
-    const userId=req.userId._id || req.userId
+    const userId= req.userId|| req.userId._id 
     const UploadJob=new Jobs({
         Title:Title,
         description:description,
