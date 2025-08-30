@@ -7,12 +7,7 @@ const jobs=async(req,res,next)=>{
     const {Title,description,company,location,salary,role}=req.body
     const userId=req.userId._id || req.userId
     const UploadJob=new Jobs({
-        Title:Title,
-        description:description,
-        company:company,
-        Location:location,
-        salary:salary,
-        Role:role,
+        Title,description,location,salary,role,
         postedBy:userId
     })
     const saved=await UploadJob.save()
