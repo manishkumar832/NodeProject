@@ -5,7 +5,7 @@ const JobSchema=new mongoose.Schema({
     description:{type:String,required:true},
     company:{type:String,required:true},
     location:{type:String,required:true},
-    salary:{type:Number,required:true},
+    salary:{type:String,required:true},
     role:{type:String,required:true},
     postedOn:{type:Date,default:Date.now},
     Status:{type:String,enum:["open","closed"],default:"open"},
