@@ -9,7 +9,7 @@ const {upload}=require("../utils/multerFile.js")
 Route.get("/profile",tokenValidator,validations,checkAuth,profile)
 
 
-Route.get("/editProfile",tokenValidator,editvalidator,validations,checkAuth,upload.single("profilePic"),editProfile)
+Route.put("/editProfile",tokenValidator,editvalidator,validations,checkAuth,upload.single("profilePic"),editProfile)
 
 
 module.exports=Route
