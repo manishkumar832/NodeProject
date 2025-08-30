@@ -19,6 +19,7 @@ const editProfile=async(req,res,next)=>{
    const{name,password,email,username}=req.body
    const ProfileImage=req.file
    const imageurl=await uploadCloudinary(ProfileImage.path)
+   console.log(imageurl)
    fs.unlinkSync(ProfileImage.path)
    if(name||password||email||password){
       const hashpassword=await bcrypt.hash(password,12)
@@ -26,12 +27,12 @@ const editProfile=async(req,res,next)=>{
       console.log(user)
       res.send({message:"updated",data:user})
    }else{
-      const err={StatusCode:404,err:"invalid user"}
+      const err={statusCode:400,err:"invalid user"}
       next(err)
    }
   } catch (error) {
-     console.log(error.message)
-     const err={StatusCode:400,message:error.message}
+     console.log(error)
+     const err={statusCode:400,message:error.message}
      next(err)
   }
 }
