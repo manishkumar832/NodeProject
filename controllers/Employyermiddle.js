@@ -19,20 +19,34 @@ const jobs=async(req,res,next)=>{
     next(err)
    }
 }
-const UpdateJobById=async(req,res,next)=>{
-    try {
-        const {Title,description,company,location,salary,role}=req.body
-        const {jobId}=req.params
-        console.log(jobId)
-        const Job=await Jobs.findByIdAndUpdate(jobId,{Title,description,company,location,salary:salary,role},{new:true})
-        
-        res.json({message:"updated successfully",data:Job})
-        
-    } catch (error) {
-        const err={statusCode:400,err:"invalid one"}
-        next(err)
+const UpdateJobById = async (req, res, next) => {
+  try {
+    const { jobId } = req.params;
+    const { Title, description, company, location, salary, role } = req.body;
+    const userId = req.userId; 
+
+  
+    const job = await Jobs.findById(jobId);
+    if (!job) return res.status(404).json({ message: "Job not found" });
+
+   
+    if (job.postedBy.toString() !== userId) {
+      return res.status(403).json({ message: "You are not authorized to update this job" });
     }
-}
+    job.Title = Title || job.Title;
+    job.description = description || job.description;
+    job.company = company || job.company;
+    job.location = location || job.location;
+    job.salary = salary || job.salary;
+    job.role = role || job.role;
+
+    await job.save();
+
+    res.status(200).json({ message: "Job updated successfully", job });
+  } catch (err) {
+    next({ statusCode: 400, err: "Invalid request" });
+  }
+};
 
 const DeleteJobById=async(req,res,next)=>{
     try {
