@@ -16,11 +16,11 @@ exports.UpdateJobValidator=[
     body("location").isString().isLength({min:3}).withMessage("fill Location details"),
     body("salary").isLength({min:3}).withMessage("fill salary details"),
     body("role").isString().isLength({min:3}).withMessage("fill role details"),
-    param("jobId").withMessage("invalid Id")
+    param("jobId").isMongoId().withMessage("invalid Id")
 ]
 
 exports.deleteValidator=[
-      param("jobId").withMessage("invalid Id")
+      param("jobId").isMongoId().withMessage("invalid Id")
 ]
 
 exports.UpdateStatusVlidator=[
