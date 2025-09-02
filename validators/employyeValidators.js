@@ -20,7 +20,7 @@ exports.UpdateJobValidator=[
 ]
 
 exports.deleteValidator=[
-      param("jobId").isUUID().withMessage("invalid Id")
+      param("jobId").withMessage("invalid Id")
 ]
 
 exports.UpdateStatusVlidator=[
