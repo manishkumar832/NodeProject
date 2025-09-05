@@ -24,7 +24,7 @@ const UpdateJobById = async (req, res, next) => {
     const { jobId } = req.params;
     const { Title, description, company, location, salary, role } = req.body;
     const userId = req.userId; 
-
+     console.log(userId)
   
     const job = await Jobs.findById(jobId);
     if (!job) return res.status(404).json({ message: "Job not found" });
