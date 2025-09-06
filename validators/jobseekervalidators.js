@@ -7,7 +7,7 @@ exports.ShowJobsIdValidator=[
 
 
 exports.ApplyValidator=[
-    body("jobId").isString().trim().withMessage("invalid Job Id"),
+    body("jobId").isMongoId().withMessage("Invalid Job Id"),
     body("name").isString().trim().isLength({min:3,max:15}).withMessage("invalid name"),
     body("email").isEmail().trim().withMessage("invalid Email"),
     body("phone").isString().trim().isLength({min:10}).withMessage("please check Number"),
