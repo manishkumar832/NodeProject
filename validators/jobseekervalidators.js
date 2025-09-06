@@ -2,7 +2,7 @@ const {body,validationResult,param}=require("express-validator")
 
 
 exports.ShowJobsIdValidator=[
-  param("id").isUUID().withMessage("invalid Id passed")
+   param("id").isMongoId().withMessage("Invalid Job Id passed")
 ]
 
 
@@ -16,7 +16,7 @@ exports.ApplyValidator=[
 ]
 
 exports.DeleteVlidator=[
-    param("applicationId").isUUID().withMessage("invalid Id")
+     param("id").isMongoId().withMessage("Invalid Application Id")
 ]
 
 exports.Jobseekervalidations=[
