@@ -24,7 +24,7 @@ exports.deleteValidator=[
 ]
 
 exports.UpdateStatusVlidator=[
-    param("applicationId").isUUID().withMessage("invalid Id passed")
+    param("applicationId").isMongoId().withMessage("invalid Id passed")
 ]
 
 exports.employeevalidations=[

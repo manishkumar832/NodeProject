@@ -78,29 +78,29 @@ fs.unlink(coverLetter.path, (err) => {
     next({statusCode:400,err:error.message})
    }
 }
-const myApplications=async(req,res,next)=>{
-    try {
-      const userInfo=req.userId._id
-    const applications=await Application.find({applicant:userInfo}).select(["-__v","-createdAt","-updatedAt"]).populate("name").populate("job",["Title","-_id"])
-      res.status(200).json({message:"Your Applications",data:applications})
+    const myApplications=async(req,res,next)=>{
+        try {
+          const userInfo=req.userId._id
+        const applications=await Application.find({applicant:userInfo}).select(["-__v","-createdAt","-updatedAt"]).populate("name").populate("job",["Title","-_id"])
+          res.status(200).json({message:"Your Applications",data:applications})
 
-      if (!applications || applications.length === 0) {
-            return res.status(404).json({ message: "No applications found for this user" });
+          if (!applications || applications.length === 0) {
+                return res.status(404).json({ message: "No applications found for this user" });
+            }
+        } catch (error) {
+          next({statusCode:400,err:error.message})
         }
-    } catch (error) {
-       next({statusCode:400,err:error.message})
     }
-}
 
-const DeleteApplication=async(req,res,next)=>{
-   try {
-      const applicationId=req.params.id
-   const job=await Application.findByIdAndDelete(applicationId)
-   res.status(200).json({message:"application deleted successfully",data:job})
-   } catch (error) {
-     next(error)
-   }
-   
-}
+    const DeleteApplication=async(req,res,next)=>{
+      try {
+          const applicationId=req.params.id
+      const job=await Application.findByIdAndDelete(applicationId)
+      res.status(200).json({message:"application deleted successfully",data:job})
+      } catch (error) {
+        next(error)
+      }
+      
+    }
 
 module.exports={ApplyJob,showAllJobs,ShowJobsById,myApplications,DeleteApplication}
