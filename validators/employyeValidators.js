@@ -14,7 +14,7 @@ exports.UpdateJobValidator=[
     body("description").isString().isLength({min:3}).withMessage("please fill descripion"),
     body("company").isString().isLength({min:3}).withMessage("fill Company details"),
     body("location").isString().isLength({min:3}).withMessage("fill Location details"),
-    body("salary").isLength({min:3}).withMessage("fill salary details"),
+    body("salary").withMessage("fill salary details"),
     body("role").isString().isLength({min:3}).withMessage("fill role details"),
     param("jobId").isMongoId().withMessage("invalid Id")
 ]
