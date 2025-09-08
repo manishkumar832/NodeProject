@@ -72,7 +72,7 @@ const AlljobsPosted = async (req, res, next) => {
     }
 
     const jobs = await Jobs.find(filter)
-      .populate("postedBy", "name -_id");
+      .populate("postedBy", "name _id");
 
     res.json({
       message: req.query.mine === "true" ? "Jobs you posted" : "All jobs",
