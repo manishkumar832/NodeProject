@@ -26,7 +26,7 @@ const UpdateJobById = async (req, res, next) => {
     const userId = req.userId; // from your tokenValidator
 
     // Find the job and populate postedBy (to get _id and name)
-    const job = await Jobs.findById(jobId).populate("postedBy", "_id name");
+    const job = await Jobs.findById(filter).populate("postedBy", "_id name");
     if (!job) return res.status(404).json({ message: "Job not found" });
 
     // Ensure comparison is between strings
