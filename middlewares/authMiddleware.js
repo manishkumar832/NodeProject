@@ -9,7 +9,7 @@ exports.checkAuth=async(req,res,next)=>{
     const decodes=await jwt.verify(token,process.env.JWtpasskey)
     const check=await Model.findById(decodes.id).select(["-password","-__v","-createdAt","-updatedAt"])
     if(check){
-        req.userId=check._id
+        req.userId=check
         next()
     }else{
         next({statusCode:400,message:"invalid token"})
