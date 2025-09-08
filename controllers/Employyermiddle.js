@@ -66,19 +66,23 @@ const DeleteJobById=async(req,res,next)=>{
         next({statusCode:400,message:error.message})
     }
 }
-
 const AlljobsPosted = async (req, res, next) => {
   try {
     const filter = {};
+
+    // If query param mine=true, filter jobs by logged-in user
     if (req.query.mine === "true") {
       filter.postedBy = req.userId; 
     }
 
+    // Fetch jobs and populate postedBy with name and _id
     const jobs = await Jobs.find(filter)
-      .populate("postedBy", "name _id");
+      .populate("postedBy", "name _id")
+      .sort({ createdAt: -1 }); // optional: newest first
 
     res.json({
       message: req.query.mine === "true" ? "Jobs you posted" : "All jobs",
+      total: jobs.length,
       data: jobs
     });
 
@@ -86,6 +90,7 @@ const AlljobsPosted = async (req, res, next) => {
     next({ statusCode: 400, message: "Something went wrong" });
   }
 };
+
 
 
 
