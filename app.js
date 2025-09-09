@@ -13,7 +13,7 @@ ConnectDB()
 
 
 app.use(cors({
-    origin:["http://localhost:5173","https://nodeproject-frontend-fw6m.vercel.app"]
+    origin:["http://localhost:5173","https://nodeproject-frontend-dqwz.vercel.app"]
 }))
 app.use(express.json())
 app.use(express.urlencoded())
