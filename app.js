@@ -13,10 +13,12 @@ ConnectDB()
 
 
 app.use(cors({
-    origin:["http://localhost:5173","https://nodeproject-frontend-i9jj.vercel.app"]
+    origin:["http://localhost:5173","https://nodeproject-frontend-i9jj.vercel.app"],  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
 }))
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -28,6 +30,8 @@ app.use("/jobSeeker",JobseekerRoute)
 
 app.use(ErrorMiddle)
 
-app.listen(process.env.port,()=>{
+const PORT=process.env.port || 5000
+
+app.listen(PORT,()=>{
     console.log("server running")
 })
