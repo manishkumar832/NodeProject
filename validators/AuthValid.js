@@ -1,10 +1,10 @@
 const {body,validationResult, header}=require("express-validator")
 
 exports.SignupValidator=[
-    body("name").isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
-    body("email").trim().isEmail().withMessage("inavlid name"),
-    body("password").isLength({min:3,max:15}).trim().isAlphanumeric().withMessage("inavlid name"),
-    body("username").isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
+    body("name").isLength({min:3,max:15}).trim().isString().withMessage("invalid name"),
+    body("email").trim().isEmail().withMessage("invalid name"),
+    body("password").isLength({min:3,max:15}).trim().withMessage("invalid password"),
+    body("username").isLength({min:3,max:15}).trim().isString().withMessage("invalid username"),
     (req,res,next)=>{
         const result=validationResult(req)
         if(!result.isEmpty()){
@@ -22,8 +22,8 @@ exports.SignupValidator=[
 
 
 exports.LoginValidator=[
-   body("email").trim().isEmail().withMessage("inavlid name"),
-    body("password").isLength({min:3,max:15}).trim().withMessage("inavlid name"),
+   body("email").trim().isEmail().withMessage("invalid email"),
+    body("password").isLength({min:3,max:15}).trim().withMessage("invalid password"),
      (req,res,next)=>{
         const result=validationResult(req)
         if(!result.isEmpty()){
@@ -45,9 +45,9 @@ exports.tokenValidator=[
 
 exports.editvalidator=[
    body("name").optional().isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
-    body("email").optional().trim().isEmail().withMessage("inavlid name"),
-    body("password").optional().isLength({min:3,max:15}).trim().isAlphanumeric().withMessage("inavlid name"),
-    body("username").optional().isLength({min:3,max:15}).trim().isString().withMessage("inavlid name"),
+    body("email").optional().trim().isEmail().withMessage("invalid email"),
+    body("password").optional().isLength({min:3,max:15}).trim().isAlphanumeric().withMessage("invalid password"),
+    body("username").optional().isLength({min:3,max:15}).trim().isString().withMessage("invalid username"),
 ]
 
 exports.validations=[

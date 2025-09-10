@@ -2,7 +2,7 @@ const {body,validationResult,param}=require("express-validator")
 
 exports.JobsValidator=[
     body("Title").isString().isLength({min:3}).trim().withMessage("invalid Title"),
-    body("description").isString().isLength({min:3}).withMessage("please fill descripion"),
+    body("description").isString().isLength({min:3}).withMessage("please fill description"),
     body("company").isString().isLength({min:3}).withMessage("fill Company details"),
     body("location").isString().isLength({min:3}).withMessage("fill Location details"),
     body("salary").isLength({min:3}).withMessage("fill salary details"),
