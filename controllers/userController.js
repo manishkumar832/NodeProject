@@ -14,7 +14,6 @@ const profile=async(req,res,next)=>{
 }
 
 
-
 const editProfile = async (req, res, next) => {
   try {
     const { name, username, email, password } = req.body;
@@ -48,7 +47,10 @@ const editProfile = async (req, res, next) => {
     console.error(error);
     res.status(400).json({ message: error.message });
   }
-}
+};
+
+module.exports = editProfile;
+
 
 
 module.exports={profile,editProfile}
