@@ -14,26 +14,39 @@ const profile=async(req,res,next)=>{
 }
 
 
-const editProfile=async(req,res,next)=>{
+
+const editProfile = async (req, res, next) => {
   try {
-   const{name,password,email,username}=req.body
-   const ProfileImage=req.file
-   const imageurl=await uploadCloudinary(ProfileImage.path)
-   console.log(imageurl)
-   fs.unlinkSync(ProfileImage.path)
-   if(name||password||email||password){
-      const hashpassword=await bcrypt.hash(password,12)
-      const user=await Model.findByIdAndUpdate(req.userId.id,{name,password:hashpassword,email,username,profile:imageurl},{new:true})
-      console.log(user)
-      res.send({message:"updated",data:user})
-   }else{
-      const err={statusCode:400,err:"invalid user"}
-      next(err)
-   }
+    const { name, username, email, password } = req.body;
+    let profileImageUrl;
+
+    // ✅ Upload image only if provided
+    if (req.file) {
+      profileImageUrl = await uploadCloudinary(req.file.path);
+      fs.unlinkSync(req.file.path);
+    }
+
+    // ✅ Build update object dynamically
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (username) updateData.username = username;
+    if (email) updateData.email = email;
+    if (password) updateData.password = await bcrypt.hash(password, 12);
+    if (profileImageUrl) updateData.profile = profileImageUrl;
+
+    // ✅ Check if anything to update
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ message: "No fields to update" });
+    }
+
+    const user = await Model.findByIdAndUpdate(req.userId.id, updateData, {
+      new: true,
+    });
+
+    res.json({ message: "Profile updated", data: user });
   } catch (error) {
-     console.log(error)
-     const err={statusCode:400,message:error.message}
-     next(err)
+    console.error(error);
+    res.status(400).json({ message: error.message });
   }
 }
 
