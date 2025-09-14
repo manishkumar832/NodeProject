@@ -30,56 +30,54 @@ const ShowJobsById = async (req, res, next) => {
 // applications Apis
 const ApplyJob = async (req, res, next) => {
   try {
-    const { jobId, name, email, phone, skills, education } = req.body;
+    const { jobId, name, email, phone, skills, education } = req.body
     const resume = req.files?.resume?.[0];
     const coverLetter = req.files?.coverLetter?.[0];
 
-    // Upload files
-    const resumeUrl = await uploadCloudinary(resume.path);
-    const coverUrl = await uploadCloudinary(coverLetter.path);
 
-    // Delete local files
-    fs.unlink(resume.path, () => {});
-    fs.unlink(coverLetter.path, () => {});
+    const resumeUrl = await uploadCloudinary(resume.path)
+    const coverurl = await uploadCloudinary(coverLetter.path)
+    fs.unlink(resume.path, (err) => {
+      if (err) {
+        console.error("Failed to delete resume file:", err);
+      }
+    });
 
-    // Find job
-    const jobs = await Jobs.findById(jobId);
-    if (!jobs) return res.status(404).send("Job not found");
+    fs.unlink(coverLetter.path, (err) => {
+      if (err) {
+        console.error("Failed to delete cover letter file:", err);
+      }
+    });
 
-    // Check if already applied
-    const alreadyApplied = await Application.findOne({ job: jobId, applicant: req.userId._id });
-    if (alreadyApplied) return res.status(400).send("You have already applied");
+    const jobs = await Jobs.findById(jobId)
+    if (!jobs) {
+      return res.status(404).send("job Not found")
 
-    // Save application
+    }
+
+
+    const alreadyApplied = await Application.findOne({ jobId, applicant: req.userId._id });
+
+    if (alreadyApplied) {
+      return res.status(400).send("You have Already Applied")
+    }
+
     const applyDetails = new Application({
       job: jobId,
       applicant: req.userId,
-      name,
-      email,
-      phone,
-      skills,
-      education,
-      resume: resumeUrl,
-      coverLetter: coverUrl,
-    });
+      name, email, phone, skills, education, resume: resumeUrl, coverLetter: coverurl
+    })
 
-    await applyDetails.save();
+    await applyDetails.save()
 
-    // Send confirmation email
-    try {
-      await sendingMails(email);
-      console.log("Confirmation email sent to:", email);
-    } catch (err) {
-      console.error("Failed to send email:", err);
-    }
+    const mail = await sendingMails(email)
+    console.log("passed mail", mail)
 
-    res.status(200).json({ message: "Applied successfully! Confirmation email sent.", Data: applyDetails });
-
+    res.status(200).json({ message: "Applied Successfully", Data: applyDetails })
   } catch (error) {
-    next({ statusCode: 400, err: error.message });
+    next({ statusCode: 400, err: error.message })
   }
-};
-
+}
 const myApplications = async (req, res, next) => {
   try {
     const userInfo = req.userId._id
