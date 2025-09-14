@@ -30,60 +30,54 @@ const ShowJobsById = async (req, res, next) => {
 // applications Apis
 const ApplyJob = async (req, res, next) => {
   try {
-    const { jobId, name, email, phone, skills, education } = req.body;
+    const { jobId, name, email, phone, skills, education } = req.body
     const resume = req.files?.resume?.[0];
     const coverLetter = req.files?.coverLetter?.[0];
 
-    if (!resume || !coverLetter) {
-      return res.status(400).json({ message: "Resume and Cover Letter are required." });
+
+    const resumeUrl = await uploadCloudinary(resume.path)
+    const coverurl = await uploadCloudinary(coverLetter.path)
+    fs.unlink(resume.path, (err) => {
+      if (err) {
+        console.error("Failed to delete resume file:", err);
+      }
+    });
+
+    fs.unlink(coverLetter.path, (err) => {
+      if (err) {
+        console.error("Failed to delete cover letter file:", err);
+      }
+    });
+
+    const jobs = await Jobs.findById(jobId)
+    if (!jobs) {
+      return res.status(404).send("job Not found")
+
     }
 
-    // Upload files to Cloudinary
-    const resumeUrl = await uploadCloudinary(resume.path);
-    const coverUrl = await uploadCloudinary(coverLetter.path);
 
-    // Delete local files
-    fs.unlink(resume.path, () => {});
-    fs.unlink(coverLetter.path, () => {});
+    const alreadyApplied = await Application.findOne({ jobId, applicant: req.userId._id });
 
-    // Check if job exists
-    const job = await Jobs.findById(jobId);
-    if (!job) return res.status(404).json({ message: "Job not found" });
+    if (alreadyApplied) {
+      return res.status(400).send("You have Already Applied")
+    }
 
-    // Check if user already applied
-    const alreadyApplied = await Application.findOne({ job: jobId, applicant: req.userId });
-    if (alreadyApplied) return res.status(400).json({ message: "You have already applied" });
-
-    // Save application
     const applyDetails = new Application({
       job: jobId,
       applicant: req.userId,
-      name,
-      email,
-      phone,
-      skills,
-      education,
-      resume: resumeUrl,
-      coverLetter: coverUrl,
-    });
+      name, email, phone, skills, education, resume: resumeUrl, coverLetter: coverurl
+    })
 
-    await applyDetails.save();
+    await applyDetails.save()
 
-    // Send email
-    try {
-      await sendingMails(email);
-      console.log("Email sent successfully to", email);
-    } catch (err) {
-      console.error("Failed to send email:", err);
-    }
+    const mail = await sendingMails(email)
+    console.log("passed mail", mail)
 
-    res.status(200).json({ message: "Applied successfully", data: applyDetails });
-
+    res.status(200).json({ message: "Applied Successfully", Data: applyDetails })
   } catch (error) {
-    next({ statusCode: 500, err: error.message });
+    next({ statusCode: 400, err: error.message })
   }
-};
-
+}
 
 const myApplications = async (req, res, next) => {
   try {
