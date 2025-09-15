@@ -28,7 +28,9 @@ const UpdateJobById = async (req, res, next) => {
   
     const job = await Jobs.findById(jobId).populate("postedBy", "_id name");
     if (!job) return res.status(404).json({ message: "Job not found" });
-    if (job.postedBy._id.toString() !== userId.toString()) {
+    if (job.postedBy._id.toString() !== userId._id.toString()) {
+      console.log(job.postedBy._id.toString() )
+      console.log(userId.toString() )
       return res.status(403).json({ message: "You are not authorized to update this job" });
     }
 

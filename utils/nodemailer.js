@@ -3,6 +3,7 @@ require("dotenv").config()
 
 const transporter=nodemailer.createTransport({
     service:"gmail",
+      port: 587,
     auth:{
       user:process.env.MAIL_ID, //here i pass my mail which i created
       pass:process.env.MAIL_PASSKEY  // created mail pass key
