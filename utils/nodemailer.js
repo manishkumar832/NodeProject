@@ -32,7 +32,7 @@ async function sendingMails(userEmail) {
    const name = extractUserName(userEmail);
     
     const mailoption={
-        from:process.env.mailid,  // here i pass my mail which i created
+        from:process.env.MAIL_ID,  // here i pass my mail which i created
         to:userEmail,
          subject: "Job Application Submitted Successfully",
     html: `
