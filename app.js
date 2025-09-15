@@ -15,6 +15,7 @@ ConnectDB()
 app.use(cors({
     origin:["http://localhost:5173","https://nodeproject-frontend-i9jj.vercel.app"],  methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
+   credentials: true
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
