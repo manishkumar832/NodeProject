@@ -4,11 +4,18 @@ require("dotenv").config()
 const transporter=nodemailer.createTransport({
     service:"gmail",
     auth:{
-      user:process.env.mailid, //here i pass my mail which i created
-      pass:process.env.mailpasskey  // created mail pass key
+      user:process.env.MAIL_ID, //here i pass my mail which i created
+      pass:process.env.MAIL_PASSKEY  // created mail pass key
     }
 })
 
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("❌ SMTP connection failed:", err);
+  } else {
+    console.log("✅ SMTP server is ready to send emails");
+  }
+});
 const extractUserName = (email) => {
   let raw = email.split("@")[0]; 
   raw = raw.replace(/[\._0-9]+/g, " ");
