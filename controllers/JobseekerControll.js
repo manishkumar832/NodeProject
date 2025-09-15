@@ -49,12 +49,13 @@ fs.unlink(coverLetter.path, (err) => {
 });
   
     const jobs=await Jobs.findById(jobId)
+    console.log(jobs)
     if(!jobs){
       return res.status(404).send("job Not found")
 
     }
     const alreadyApplied = await Application.findOne({ jobId, applicant: req.userId._id });
-
+    console.log(alreadyApplied)
     if(alreadyApplied){
       return res.status(400).send("You have Already Applied")
     }
@@ -65,6 +66,7 @@ fs.unlink(coverLetter.path, (err) => {
       name,email,phone,skills,education,resume:resumeUrl,coverLetter:coverurl
     })
 
+    console.log(applyDetails)
     await applyDetails.save()
    const mail = await sendingMails(email)
     console.log("passed mail", mail)
@@ -78,7 +80,9 @@ fs.unlink(coverLetter.path, (err) => {
 const myApplications = async (req, res, next) => {
   try {
     const userInfo = req.userId._id
+    console.log(userInfo)
     const applications = await Application.find({ applicant: userInfo }).select(["-__v", "-createdAt", "-updatedAt"]).populate("name").populate("job", ["Title", "-_id"])
+    console.log(applications)
     res.status(200).json({ message: "Your Applications", data: applications })
 
     if (!applications || applications.length === 0) {
