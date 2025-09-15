@@ -23,33 +23,35 @@ const UpdateJobById = async (req, res, next) => {
   try {
     const { jobId } = req.params;
     const { Title, description, company, location, salary, role } = req.body;
-    const userId = req.userId; // from your tokenValidator
+    const userId = req.userId; 
 
-    // Find the job and populate postedBy (to get _id and name)
-    const job = await Jobs.findById(filter).populate("postedBy", "_id name");
+  
+    const job = await Jobs.findById(jobId).populate("postedBy", "_id name");
     if (!job) return res.status(404).json({ message: "Job not found" });
-
-    // Ensure comparison is between strings
     if (job.postedBy._id.toString() !== userId.toString()) {
       return res.status(403).json({ message: "You are not authorized to update this job" });
     }
 
-    // Update job fields only if provided
-    job.Title = Title || job.Title;
-    job.description = description || job.description;
-    job.company = company || job.company;
-    job.location = location || job.location;
-    job.salary = salary || job.salary;
-    job.role = role || job.role;
+  
+    if (Title) job.Title = Title;
+    if (description) job.description = description;
+    if (company) job.company = company;
+    if (location) job.location = location;
+    if (salary) job.salary = salary;
+    if (role) job.role = role;
 
     const updatedJob = await job.save();
 
-    res.status(200).json({ message: "Job updated successfully", job: updatedJob });
+    res.status(200).json({
+      message: "Job updated successfully",
+      job: updatedJob,
+    });
   } catch (err) {
     console.error("UpdateJobById error:", err);
     next({ statusCode: 400, message: "Invalid request" });
   }
 };
+
 
 const DeleteJobById=async(req,res,next)=>{
     try {
