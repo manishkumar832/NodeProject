@@ -33,6 +33,12 @@ const ApplyJob=async(req,res,next)=>{
     const {jobId, name, email, phone, skills, education}=req.body
     const resume = req.files?.resume?.[0];
     const coverLetter = req.files?.coverLetter?.[0];
+     const alreadyApplied = await Application.findOne({ jobId, applicant: req.userId._id });
+    console.log(alreadyApplied)
+    if(alreadyApplied){
+      return res.status(400).send("You have Already Applied")
+    }
+
     
     const resumeUrl=await uploadCloudinary(resume.path)
     const coverurl=await uploadCloudinary(coverLetter.path)
@@ -54,12 +60,7 @@ fs.unlink(coverLetter.path, (err) => {
       return res.status(404).send("job Not found")
 
     }
-    const alreadyApplied = await Application.findOne({ jobId, applicant: req.userId._id });
-    console.log(alreadyApplied)
-    if(alreadyApplied){
-      return res.status(400).send("You have Already Applied")
-    }
-
+   
     const applyDetails=new Application({
       job:jobId,
       applicant:req.userId,
