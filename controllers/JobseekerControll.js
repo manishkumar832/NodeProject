@@ -56,7 +56,7 @@ const ApplyJob = async (req, res, next) => {
     }
 
 
-    const alreadyApplied = await Application.findOne({ jobId, applicant: req.userId._id });
+    const alreadyApplied = await Application.findOne({ job:jobId, applicant: req.userId });
 
     if (alreadyApplied) {
       return res.status(400).send("You have Already Applied")
