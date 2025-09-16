@@ -1,10 +1,10 @@
 const {body,validationResult, header}=require("express-validator")
 
 exports.SignupValidator=[
-    body("name").isLength({min:3,max:15}).trim().isString().matches(/^[A-Za-z ]+$/).withMessage("invalid name"),
+    body("name").isLength({min:3,max:15}).trim().isString().matches(/^[A-Za-z0-9 ~!@#$%^&*\-_"':<>/;]+$/).withMessage("invalid name"),
     body("email").trim().isEmail().withMessage("invalid name"),
-    body("password").isLength({min:3,max:15}).trim().withMessage("invalid password"),
-    body("username").isLength({min:3,max:15}).trim().isString().matches(/^[A-Za-z ]+$/).withMessage("invalid username"),
+    body("password").isLength({min:3,max:15}).trim().matches(/^[A-Za-z0-9 ~!@#$%^&*\-_"':<>/;]+$/).withMessage("invalid password"),
+    body("username").isLength({min:3,max:15}).trim().isString().matches(/^[A-Za-z0-9 ~!@#$%^&*\-_"':<>/;]+$/).withMessage("invalid username"),
     (req,res,next)=>{
         const result=validationResult(req)
         if(!result.isEmpty()){
@@ -23,7 +23,7 @@ exports.SignupValidator=[
 
 exports.LoginValidator=[
    body("email").trim().isEmail().withMessage("invalid email"),
-    body("password").isLength({min:3,max:15}).trim().withMessage("invalid password"),
+    body("password").isLength({min:3,max:15}).trim().matches(/^[A-Za-z0-9 ~!@#$%^&*\-_"':<>/;]+$/).withMessage("invalid password"),
      (req,res,next)=>{
         const result=validationResult(req)
         if(!result.isEmpty()){

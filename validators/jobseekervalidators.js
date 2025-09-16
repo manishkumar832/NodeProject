@@ -8,11 +8,11 @@ exports.ShowJobsIdValidator=[
 
 exports.ApplyValidator=[
     body("jobId").isMongoId().withMessage("Invalid Job Id"),
-    body("name").isString().trim().matches(/^[A-Za-z ]+$/).isLength({min:3,max:15}).withMessage("invalid name"),
+    body("name").isString().trim().matches(/^[A-Za-z0-9 ~!@#$%^&*\-_"':<>/;]+$/).isLength({min:3,max:15}).withMessage("invalid name"),
     body("email").isEmail().trim().withMessage("invalid Email"),
     body("phone").isString().trim().isLength({min:10}).withMessage("please check Number"),
-    body("skills").isString().trim().matches(/^[A-Za-z ]+$/).isLength({min:5}).withMessage("Mention Your Skills"),
-    body("education").isString().trim().matches(/^[A-Za-z ]+$/).withMessage("Education details")
+    body("skills").isString().trim().matches(/^[A-Za-z0-9 ~!@#$%^&*\-_"':<>/;]+$/).isLength({min:5}).withMessage("Mention Your Skills"),
+    body("education").isString().trim().matches(/^[A-Za-z0-9 ~!@#$%^&*\-_"':<>/;]+$/).withMessage("Education details")
 ]
 
 exports.DeleteVlidator=[
