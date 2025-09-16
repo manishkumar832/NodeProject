@@ -1,8 +1,10 @@
-require("dotenv").config();
 const sgMail = require("@sendgrid/mail");
+require("dotenv").config();
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Set your SendGrid API key
+sgMail.setApiKey(process.env.MAIL_PASSKEY);
 
+// Helper: Extract name from email
 const extractUserName = (email) => {
   let raw = email.split("@")[0];
   raw = raw.replace(/[\._0-9]+/g, " ");
@@ -13,15 +15,13 @@ const extractUserName = (email) => {
     .join(" ");
 };
 
+// Main function to send email
 async function sendingMails(userEmail) {
   const name = extractUserName(userEmail);
 
   const msg = {
     to: userEmail,
-    from: {
-      email: process.env.MAIL_ID,   // Verified Gmail
-      name: "Team NextHire"
-    },
+    from: process.env.MAIL_ID, // Verified sender
     subject: "Job Application Submitted Successfully",
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -31,16 +31,16 @@ async function sendingMails(userEmail) {
         <br/>
         <p>Regards,<br/><strong>Team NextHire</strong></p>
       </div>
-    `
+    `,
   };
 
   try {
-    await sgMail.send(msg);
-    console.log("✅ Mail sent successfully");
-    return "Mail sent successfully";
+    const result = await sgMail.send(msg);
+    console.log("📨 Mail sent successfully:", result[0].statusCode);
+    return result;
   } catch (error) {
-    console.error("❌ Error sending mail:", error.response?.body || error);
-    return error;
+    console.error("❌ Error sending mail:", error);
+    throw error; // Let ApplyJob handle it
   }
 }
 

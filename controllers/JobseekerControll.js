@@ -3,6 +3,7 @@ const { Jobs, Application } = require("../models/jobUploadmodel")
 const { uploadCloudinary } = require("../utils/cloudinary")
 const fs = require("fs")
 const { sendingMails } = require("../utils/nodemailer.js")
+
 const { Model } = require("../models/authmodel.js")
 
 
