@@ -6,7 +6,7 @@ require("dotenv").config();
 const transporter = nodemailer.createTransport(
   sgTransport({
     auth: {
-      api_key: process.env.SENDGRID_API_KEY, // Add your SendGrid API key in .env
+      api_key: process.env.MAIL_PASSKEY, // Add your SendGrid API key in .env
     },
   })
 );
