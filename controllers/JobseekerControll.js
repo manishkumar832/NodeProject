@@ -34,7 +34,7 @@ const ApplyJob = async (req, res, next) => {
     const resume = req.files?.resume?.[0];
     const coverLetter = req.files?.coverLetter?.[0];
 
-    const alreadyApplied = await Application.findOne({ jobId, applicant: req.userId._id });
+    const alreadyApplied = await Application.findOne({ job:jobId, applicant: req.userId });
     if (alreadyApplied) {
       return res.status(400).send("You have Already Applied");
     }
