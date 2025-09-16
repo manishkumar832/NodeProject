@@ -1,43 +1,27 @@
-const nodemailer = require("nodemailer");
-const sgTransport = require("nodemailer-sendgrid-transport");
 require("dotenv").config();
+const sgMail = require("@sendgrid/mail");
 
-// Configure transporter with SendGrid API
-const transporter = nodemailer.createTransport(
-  sgTransport({
-    auth: {
-      api_key: process.env.MAIL_PASSKEY, // Add your SendGrid API key in .env
-    },
-  })
-);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Verification function
-transporter.verify((err, success) => {
-  if (err) {
-    console.error("❌ SendGrid connection failed:", err);
-  } else {
-    console.log("✅ SendGrid is ready to send emails");
-  }
-});
-
-// Function to extract user name from email
 const extractUserName = (email) => {
   let raw = email.split("@")[0];
   raw = raw.replace(/[\._0-9]+/g, " ");
   return raw
     .split(" ")
     .filter(Boolean)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 };
 
-// Function to send email
 async function sendingMails(userEmail) {
   const name = extractUserName(userEmail);
 
-  const mailOptions = {
-    from: "you@yourdomain.com", // Must be verified sender in SendGrid
+  const msg = {
     to: userEmail,
+    from: {
+      email: process.env.MAIL_ID,   // Verified Gmail
+      name: "Team NextHire"
+    },
     subject: "Job Application Submitted Successfully",
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -47,15 +31,15 @@ async function sendingMails(userEmail) {
         <br/>
         <p>Regards,<br/><strong>Team NextHire</strong></p>
       </div>
-    `,
+    `
   };
 
   try {
-    const result = await transporter.sendMail(mailOptions);
-    console.log("✅ Mail sent successfully", result);
+    await sgMail.send(msg);
+    console.log("✅ Mail sent successfully");
     return "Mail sent successfully";
   } catch (error) {
-    console.error("❌ Error sending mail:", error);
+    console.error("❌ Error sending mail:", error.response?.body || error);
     return error;
   }
 }
