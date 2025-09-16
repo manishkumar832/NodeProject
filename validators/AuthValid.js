@@ -1,10 +1,10 @@
 const {body,validationResult, header}=require("express-validator")
 
 exports.SignupValidator=[
-    body("name").isLength({min:3,max:15}).trim().isString().withMessage("invalid name"),
+    body("name").isLength({min:3,max:15}).trim().isString().matches(/^[A-Za-z ]+$/).withMessage("invalid name"),
     body("email").trim().isEmail().withMessage("invalid name"),
     body("password").isLength({min:3,max:15}).trim().withMessage("invalid password"),
-    body("username").isLength({min:3,max:15}).trim().isString().withMessage("invalid username"),
+    body("username").isLength({min:3,max:15}).trim().isString().matches(/^[A-Za-z ]+$/).withMessage("invalid username"),
     (req,res,next)=>{
         const result=validationResult(req)
         if(!result.isEmpty()){
