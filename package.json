@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/manishkumar832/NodeProject#readme",
   "dependencies": {
-    "@sendgrid/mail": "^8.1.5",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
